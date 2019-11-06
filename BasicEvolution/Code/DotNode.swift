@@ -44,21 +44,26 @@ public class DotNode: SKShapeNode {
         
         vel += acc
         vel = CGVector(dx: min(vel.dx, 5), dy: min(vel.dy, 5))
-        position += acc
+        position += vel
     }
     
     func update() {
-        guard let scene = self.scene else { return }
+        guard let scene = self.scene as? GameScene else { return }
         guard !isDead && !isGoalReached else { return }
         move();
         
         let width = scene.size.width / 2
         let height = scene.size.height / 2
+        let distanceToTarget = position.distanceTo(scene.targetNode.position)
         
         //if near the edges of the window then kill it
         if position.x < -width + 2 || position.y < -height + 2 || position.x > width - 2 || position.y > height - 2 {
             isDead = true
         }
+        if distanceToTarget < 20 {
+            isGoalReached = true
+        }
+        
     }
 }
 

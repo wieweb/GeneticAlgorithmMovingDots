@@ -84,7 +84,6 @@ extension Population {
         //if this dot reached the goal then reset the minimum number of steps it takes to get to the goal
         if dots[bestDot].isGoalReached {
             minStep = dots[bestDot].brain.currentStep
-            print("step: \(minStep)");
         }
     }
     

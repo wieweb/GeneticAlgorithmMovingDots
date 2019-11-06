@@ -11,7 +11,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var targetNode: SKShapeNode!
+    var targetNode: SKShapeNode!
     private var labelNode: SKLabelNode!
     
     let population = Population(size: 100)
