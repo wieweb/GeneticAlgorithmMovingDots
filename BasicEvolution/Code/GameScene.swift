@@ -12,6 +12,9 @@ import GameplayKit
 class GameScene: SKScene {
     
     var targetNode: SKShapeNode!
+    
+    let obstacle = SKShapeNode(rect: CGRect(x: -250, y: -100, width: 400, height: 20))
+    
     private var labelNode: SKLabelNode!
     
     let population = Population(size: 100)
@@ -21,6 +24,9 @@ class GameScene: SKScene {
         // Get label node from scene and store it for use later
         self.targetNode = self.childNode(withName: "//target") as? SKShapeNode
         self.labelNode = self.childNode(withName: "//generationLabel") as? SKLabelNode
+        
+        obstacle.fillColor = SKColor.blue
+        addChild(obstacle)
         
         if let target = self.targetNode {
             target.alpha = 0.0

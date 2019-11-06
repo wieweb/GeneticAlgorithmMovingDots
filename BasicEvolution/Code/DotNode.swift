@@ -16,6 +16,7 @@ public class DotNode: SKShapeNode {
     var acc: CGVector = .zero
     
     var isDead: Bool = false
+    var hitObstacle = false
     var isGoalReached: Bool = false
     var isBest: Bool = false {
         didSet {
@@ -29,6 +30,7 @@ public class DotNode: SKShapeNode {
         vel = .zero
         acc = .zero
         isDead = false
+        hitObstacle = false
         isGoalReached = false
         fitness = 0.0
         brain.currentStep = 0
@@ -60,6 +62,13 @@ public class DotNode: SKShapeNode {
         if position.x < -width + 2 || position.y < -height + 2 || position.x > width - 2 || position.y > height - 2 {
             isDead = true
         }
+        
+        //if hit obstacle
+        if position.x > -250 && position.x < 150 && position.y < -80  && position.y > -100 {
+            isDead = true
+            hitObstacle = true
+        }
+        
         if distanceToTarget < 20 {
             isGoalReached = true
         }
@@ -78,9 +87,11 @@ extension DotNode {
         } else {
             
             //if the dot didn't reach the goal then the fitness is based on how close it is to the goal
-            
             let distanceToTarget = position.distanceTo(targerPosition)
-            fitness = 1.0 / Double(distanceToTarget * distanceToTarget);
+            fitness = 1.0 / Double(distanceToTarget * distanceToTarget)
+            if hitObstacle {
+                fitness = 0.000001
+            }
         }
     }
     
