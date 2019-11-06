@@ -11,8 +11,8 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var targetNode: SKShapeNode?
-    private var labelNode: SKLabelNode?
+    private var targetNode: SKShapeNode!
+    private var labelNode: SKLabelNode!
     
     let population = Population(size: 100)
     
@@ -32,11 +32,14 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         if population.allDotsDead {
-            let newGeneration = population.naturalSelection()
             for dot in population.dots {
                 dot.removeFromParent()
             }
+            
+            population.calculateFitness(targerPosition: targetNode.position)
+            let newGeneration = population.naturalSelection()
             population.dots = newGeneration
+            population.mutateDemBabies()
             population.addToScene(self)
         } else {
             population.update()

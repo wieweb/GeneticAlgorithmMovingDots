@@ -10,11 +10,11 @@ import SpriteKit
 
 public class DotNode: SKShapeNode {
     
-    let brain = Brain(size: 1000)
+    var brain = Brain(size: 1000)
     
     var vel: CGVector = .zero
     var acc: CGVector = .zero
-
+    
     var isDead: Bool = false
     var isGoalReached: Bool = false
     var isBest: Bool = false {
@@ -23,12 +23,14 @@ public class DotNode: SKShapeNode {
         }
     }
     
+    var fitness: Double = 0.0
+    
     private func move() {
         if brain.directions.count > brain.currentStep {
-          acc = brain.directions[brain.currentStep]
-          brain.currentStep += 1
+            acc = brain.directions[brain.currentStep]
+            brain.currentStep += 1
         } else {
-          isDead = true
+            isDead = true
         }
         
         vel += acc
@@ -49,4 +51,31 @@ public class DotNode: SKShapeNode {
             isDead = true
         }
     }
+}
+
+extension DotNode {
+    
+    func calculateFitness(targerPosition: CGPoint) {
+        if isGoalReached {
+            
+            //if the dot reached the goal then the fitness is based on the amount of steps it took to get there
+            fitness = Double(1.0) / Double(16.0) + Double(10000.0) / Double(brain.currentStep) * Double(brain.currentStep)
+            
+        } else {
+            
+            //if the dot didn't reach the goal then the fitness is based on how close it is to the goal
+            
+            let distanceToTarget = position.distanceTo(targerPosition)
+            fitness = 1.0 / Double(distanceToTarget * distanceToTarget);
+        }
+    }
+    
+    func gimmeBaby() -> DotNode {
+        let baby = DotNode(circleOfRadius: 5)
+        
+        //babies have the same brain as their parents
+        baby.brain = self.brain.clone()
+        return baby
+    }
+    
 }
