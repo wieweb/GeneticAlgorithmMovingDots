@@ -25,6 +25,15 @@ public class DotNode: SKShapeNode {
     
     var fitness: Double = 0.0
     
+    func reset() {
+        vel = .zero
+        acc = .zero
+        isDead = false
+        isGoalReached = false
+        fitness = 0.0
+        brain.currentStep = 0
+    }
+    
     private func move() {
         if brain.directions.count > brain.currentStep {
             acc = brain.directions[brain.currentStep]

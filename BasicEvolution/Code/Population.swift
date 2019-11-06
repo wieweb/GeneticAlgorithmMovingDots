@@ -28,7 +28,6 @@ class Population {
     func addToScene(_ scene: SKScene) {
         for dot in dots {
             dot.position = CGPoint(x: 0, y: -(scene.size.height / 2) + 50)
-            dot.isBest = false
             scene.addChild(dot)
         }
     }
@@ -114,14 +113,16 @@ extension Population {
         calculateFitnessSum();
         
         var newGeneration: [DotNode] = []
-        //the champion lives on
-        newGeneration.append(dots[bestDot])
         
         for _ in 0..<dots.count - 1 {
             //select parent based on fitness
             guard let parent = selectParent() else { continue }
             newGeneration.append(parent.gimmeBaby())
         }
+        //the champion lives on
+        newGeneration.append(dots[bestDot])
+        newGeneration.last?.reset()
+        newGeneration.last?.isBest = true
         
         generation += 1
         
